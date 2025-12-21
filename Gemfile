@@ -21,6 +21,9 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 gem "solid_cache"
 gem "solid_queue"
 gem "solid_cable"
+gem 'devise'
+gem 'simple_form'
+gem 'kaminari'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false

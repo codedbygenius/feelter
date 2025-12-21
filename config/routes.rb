@@ -1,4 +1,12 @@
 Rails.application.routes.draw do
+  get "contents/select"
+  get "contents/show"
+  get "categories/select"
+  get "moods/select"
+  get "moods/create"
+  get "pages/home"
+  get "pages/dashboard"
+  devise_for :users
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
