@@ -1,0 +1,198 @@
+<!-- app/views/journal_entries/analytics.html.erb -->
+<div class="journal-container">
+  <div class="container" style="max-width: 1200px;">
+    <div class="journal-header fade-in-up">
+      <h1>Your Insights 📊</h1>
+      <p>Understanding your emotional patterns</p>
+    </div>
+
+    <!-- Key Metrics -->
+    <div class="row mb-5">
+      <div class="col-md-3 mb-4 fade-in-up">
+        <div class="content-card text-center">
+          <h2 class="text-gradient" style="font-size: 3rem; margin-bottom: 0.5rem;">
+            <%= current_user.moods.count %>
+          </h2>
+          <p class="text-muted" style="margin: 0;">Total Check-ins</p>
+        </div>
+      </div>
+
+      <div class="col-md-3 mb-4 fade-in-up" style="animation-delay: 0.1s;">
+        <div class="content-card text-center">
+          <h2 class="text-gradient" style="font-size: 3rem; margin-bottom: 0.5rem;">
+            <%= current_user.journal_entries.count %>
+          </h2>
+          <p class="text-muted" style="margin: 0;">Journal Entries</p>
+        </div>
+      </div>
+
+      <div class="col-md-3 mb-4 fade-in-up" style="animation-delay: 0.2s;">
+        <div class="content-card text-center">
+          <% analytics = AnalyticsService.new(current_user) %>
+          <h2 class="text-gradient" style="font-size: 3rem; margin-bottom: 0.5rem;">
+            <%= analytics.generate_report[:current_streak] %>
+          </h2>
+          <p class="text-muted" style="margin: 0;">Day Streak 🔥</p>
+        </div>
+      </div>
+
+      <div class="col-md-3 mb-4 fade-in-up" style="animation-delay: 0.3s;">
+        <div class="content-card text-center">
+          <h2 class="text-gradient" style="font-size: 3rem; margin-bottom: 0.5rem;">
+            <%= current_user.moods.where('created_at >= ?', 7.days.ago).count %>
+          </h2>
+          <p class="text-muted" style="margin: 0;">This Week</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mood Trends Chart -->
+    <% if current_user.moods.count > 0 %>
+      <div class="row mb-5">
+        <div class="col-12 fade-in-up" style="animation-delay: 0.4s;">
+          <div class="content-card">
+            <h3 class="mb-4">Mood Trends (Last 30 Days)</h3>
+            <% mood_data = current_user.moods.where('created_at >= ?', 30.days.ago)
+                 .group_by_day(:created_at)
+                 .group(:feeling)
+                 .count
+                 .transform_keys { |date, feeling| [date, feeling.to_s.capitalize] } %>
+            <%= line_chart mood_data,
+                colors: ['#FFB84D', '#A8DADC', '#6C9A8B'],
+                curve: true,
+                height: '300px',
+                download: true,
+                library: {
+                  scales: {
+                    y: {
+                      beginAtZero: true,
+                      ticks: {
+                        stepSize: 1
+                      }
+                    }
+                  }
+                } %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- Charts Row -->
+    <div class="row mb-5">
+      <!-- Mood Distribution Pie Chart -->
+      <div class="col-md-6 mb-4 fade-in-up" style="animation-delay: 0.5s;">
+        <div class="content-card">
+          <h3 class="mb-4">Mood Distribution</h3>
+          <% if @mood_distribution.any? %>
+            <% pie_data = @mood_distribution.transform_keys { |k| k.to_s.capitalize } %>
+            <%= pie_chart pie_data,
+                colors: ['#FFB84D', '#A8DADC', '#6C9A8B'],
+                donut: true,
+                height: '300px',
+                download: true %>
+          <% else %>
+            <p class="text-muted text-center py-5">Start tracking your moods to see patterns!</p>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Category Preferences Bar Chart -->
+      <div class="col-md-6 mb-4 fade-in-up" style="animation-delay: 0.6s;">
+        <div class="content-card">
+          <h3 class="mb-4">Category Preferences</h3>
+          <% category_data = current_user.interactions
+               .joins(:category)
+               .group('categories.name')
+               .count
+               .transform_keys(&:capitalize) %>
+          <% if category_data.any? %>
+            <%= column_chart category_data,
+                colors: ['#667eea'],
+                height: '300px',
+                download: true %>
+          <% else %>
+            <p class="text-muted text-center py-5">Explore more content to see your preferences!</p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Weekly Activity Area Chart -->
+    <div class="row mb-5">
+      <div class="col-12 fade-in-up" style="animation-delay: 0.7s;">
+        <div class="content-card">
+          <h3 class="mb-4">Weekly Activity (Last 12 Weeks)</h3>
+          <% weekly_data = current_user.moods
+               .where('created_at >= ?', 12.weeks.ago)
+               .group_by_week(:created_at)
+               .count %>
+          <% if weekly_data.any? %>
+            <%= area_chart weekly_data,
+                color: '#667eea',
+                height: '250px',
+                curve: true,
+                download: true,
+                library: {
+                  scales: {
+                    y: {
+                      beginAtZero: true
+                    }
+                  }
+                } %>
+          <% else %>
+            <p class="text-muted text-center py-5">Keep tracking to see your activity patterns!</p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mood by Hour of Day -->
+    <% if current_user.moods.count > 10 %>
+      <div class="row mb-5">
+        <div class="col-12 fade-in-up" style="animation-delay: 0.8s;">
+          <div class="content-card">
+            <h3 class="mb-4">Mood Patterns by Time of Day</h3>
+            <% hourly_data = current_user.moods
+                 .where('created_at >= ?', 30.days.ago)
+                 .group_by_hour_of_day(:created_at)
+                 .group(:feeling)
+                 .count
+                 .transform_keys { |hour, feeling| [hour, feeling.to_s.capitalize] } %>
+            <%= line_chart hourly_data,
+                colors: ['#FFB84D', '#A8DADC', '#6C9A8B'],
+                height: '250px',
+                xtitle: 'Hour of Day',
+                ytitle: 'Check-ins',
+                download: true %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- Personalized Insights -->
+    <div class="row mb-5">
+      <div class="col-12 fade-in-up" style="animation-delay: 0.9s;">
+        <div class="content-card">
+          <h3 class="mb-4">Personalized Insights ✨</h3>
+          <% insights = RecommendationEngine.new(current_user).generate_insights %>
+          <% if insights.any? %>
+            <% insights.each do |insight| %>
+              <div class="alert alert-<%= insight[:type] == 'positive' ? 'success' : 'info' %> d-flex align-items-center mb-3" style="border-radius: 12px; border: none;">
+                <div style="font-size: 2rem; margin-right: 1rem;">
+                  <%= insight[:type] == 'positive' ? '🎉' : 'ℹ️' %>
+                </div>
+                <div><%= insight[:message] %></div>
+              </div>
+            <% end %>
+          <% else %>
+            <p class="text-muted text-center py-3">Keep tracking your moods to unlock insights!</p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center">
+      <%= link_to "← Back to Journal", journal_entries_path, class: "btn btn-secondary" %>
+    </div>
+  </div>
+</div>

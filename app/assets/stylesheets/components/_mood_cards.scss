@@ -1,0 +1,18 @@
+.mood-card {
+  .mood-option {
+    transition: all 0.3s ease;
+    border: 3px solid transparent;
+    background: white;
+    
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+  }
+  
+  .mood-radio:checked + .mood-option {
+    border-color: #007bff;
+    background: #f0f8ff;
+    transform: scale(1.05);
+  }
+}

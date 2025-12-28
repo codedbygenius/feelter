@@ -1,1 +1,52 @@
-// Sassy
+// ============================================
+// FEELTER DESIGN SYSTEM (FIXED)
+// ============================================
+
+// Typography & Base
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+  background: #fcfaf7; // Matching your zen theme
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+// ============================================
+// ANIMATIONS (Keeping these for your chat bubbles)
+// ============================================
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes gentlePulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+// ============================================
+// BOOTSTRAP BYPASS
+// ============================================
+// DO NOT ADD @import "bootstrap" here.
+// Tailwind is handled by the CDN in your layout.

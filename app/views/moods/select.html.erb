@@ -1,2 +1,121 @@
-<h1>Moods#select</h1>
-<p>Find me in app/views/moods/select.html.erb</p>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Quicksand:wght@300..600&display=swap" rel="stylesheet">
+
+<style>
+  .font-handwritten { font-family: 'Caveat', cursive !important; }
+  .font-clean { font-family: 'Quicksand', sans-serif !important; }
+
+  .sketch-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 70px); /* Account for footer height */
+    background-color: #fcfaf7;
+    background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
+    position: relative;
+    padding: 10px 20px; /* Reduced padding */
+    text-align: center;
+    overflow: hidden; /* Prevent container-level scroll */
+  }
+
+  .mood-card-button {
+    appearance: none;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid #2d3748;
+    border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 4px 4px 0px #2d3748;
+
+    /* MOBILE SIZES: Smaller to fit screen without scrolling */
+    width: 140px;
+    height: 140px;
+    gap: 5px;
+    padding: 10px;
+  }
+
+  /* DESKTOP SIZES: Larger squares for bigger screens */
+  @media (min-height: 700px) {
+    .mood-card-button {
+      width: 180px;
+      height: 180px;
+      gap: 10px;
+    }
+  }
+
+  .mood-card-button:hover {
+    background-color: #fef3c7;
+    transform: rotate(-2deg) scale(1.05);
+    box-shadow: 6px 6px 0px #2d3748;
+  }
+
+  .mood-emoji {
+    font-size: 2.5rem; /* Smaller for mobile */
+    display: block;
+    line-height: 1;
+  }
+
+  @media (min-height: 700px) {
+    .mood-emoji { font-size: 3.5rem; }
+  }
+
+  .bottom-wave {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    line-height: 0;
+    opacity: 0.1;
+    pointer-events: none;
+  }
+</style>
+
+<main class="sketch-container">
+
+  <div class="absolute top-2 left-8">
+    <h3 class="text-xl font-handwritten text-slate-700">FEELTER 🍃</h3>
+  </div>
+
+  <div class="max-w-4xl w-full z-10">
+    <div class="mb-4 md:mb-8">
+      <h1 class="text-4xl md:text-7xl font-handwritten text-slate-800 mb-1 tracking-tight">
+        Check in with yourself
+      </h1>
+      <p class="text-lg md:text-2xl font-clean text-slate-500 font-light italic">
+        Select your current feeling
+      </p>
+    </div>
+
+    <div class="flex flex-col items-center gap-3 md:gap-6">
+
+      <%= button_to create_mood_path(feeling: 'happy'), method: :post, class: "mood-card-button" do %>
+        <span class="mood-emoji">😊</span>
+        <span class="font-clean text-lg md:text-2xl font-semibold text-slate-700">Happy</span>
+      <% end %>
+
+      <%= button_to create_mood_path(feeling: 'sad'), method: :post, class: "mood-card-button" do %>
+        <span class="mood-emoji">😢</span>
+        <span class="font-clean text-lg md:text-2xl font-semibold text-slate-700">Sad</span>
+      <% end %>
+
+      <%= button_to create_mood_path(feeling: 'meh'), method: :post, class: "mood-card-button" do %>
+        <span class="mood-emoji">😐</span>
+        <span class="font-clean text-lg md:text-2xl font-semibold text-slate-700">Meh</span>
+      <% end %>
+
+    </div>
+  </div>
+
+  <div class="bottom-wave">
+    <svg viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg">
+      <path fill="none" stroke="#2d3748" stroke-width="2" d="M0,160 C240,240 480,80 720,160 C960,240 1200,80 1440,160" stroke-dasharray="8,8" />
+    </svg>
+  </div>
+
+</main>

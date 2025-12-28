@@ -1,0 +1,77 @@
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Quicksand:wght@300..600&display=swap" rel="stylesheet">
+
+<style>
+  .font-handwritten { font-family: 'Caveat', cursive !important; }
+  .font-clean { font-family: 'Quicksand', sans-serif !important; }
+
+  .auth-bg {
+    min-height: 100vh; background-color: #fcfaf7;
+    background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
+    display: flex; align-items: center; justify-content: center; padding: 20px;
+  }
+
+  .login-card {
+    background: white; border: 1px solid #e2e8f0; padding: 3rem 2rem;
+    border-radius: 4px; max-width: 400px; width: 100%;
+    box-shadow: 20px 20px 0px rgba(45, 55, 72, 0.05); /* Blocky shadow */
+    position: relative;
+  }
+
+  /* Decorative "String tie" effect like an old folder */
+  .login-card::after {
+    content: "◦"; position: absolute; top: 10px; right: 10px;
+    font-size: 2rem; color: #cbd5e1;
+  }
+
+  .input-field {
+    width: 100%; border: none; border-bottom: 2px solid #f1f5f9;
+    padding: 10px 0; margin-bottom: 20px; font-family: 'Quicksand', sans-serif;
+    outline: none; transition: border-color 0.3s;
+  }
+
+  .input-field:focus { border-bottom-color: #fecaca; }
+
+  .btn-auth {
+    width: 100%; background: #2d3748; color: white; padding: 12px;
+    border-radius: 9999px; font-weight: 600; border: none; cursor: pointer;
+    margin-top: 10px; transition: transform 0.2s;
+  }
+
+  .btn-auth:hover { transform: translateY(-2px); background: #1a202c; }
+</style>
+
+<main class="auth-bg">
+  <div class="login-card">
+    <div class="text-center mb-8">
+      <h1 class="text-5xl font-handwritten text-slate-800 m-0">Feelter</h1>
+      <p class="font-clean text-slate-400 italic text-sm">Open your digital journal</p>
+    </div>
+
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+      <div class="mb-4">
+        <%= f.label :email, class: "font-clean text-xs uppercase tracking-widest text-slate-400" %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "input-field" %>
+      </div>
+
+      <div class="mb-4">
+        <%= f.label :password, class: "font-clean text-xs uppercase tracking-widest text-slate-400" %>
+        <%= f.password_field :password, autocomplete: "current-password", class: "input-field" %>
+      </div>
+
+      <% if devise_mapping.rememberable? %>
+        <div class="flex items-center gap-2 mb-6">
+          <%= f.check_box :remember_me, class: "accent-rose-300" %>
+          <%= f.label :remember_me, class: "font-clean text-sm text-slate-500" %>
+        </div>
+      <% end %>
+
+      <div class="actions">
+        <%= f.submit "Log in", class: "btn-auth font-clean" %>
+      </div>
+    <% end %>
+
+    <div class="mt-8 pt-6 border-t border-slate-100 text-center space-y-2">
+      <%= render "devise/shared/links" %>
+    </div>
+  </div>
+</main>

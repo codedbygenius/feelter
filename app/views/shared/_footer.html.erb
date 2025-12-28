@@ -1,0 +1,35 @@
+<div class="footer">
+  <div class="container-fluid">
+    <ul class="footer-items">
+
+      <li class="footer-item">
+        <%# Mood Link %>
+        <%= link_to select_mood_path, class: "footer-link #{'active' if current_page?(select_mood_path)}" do %>
+          <i class="fas fa-smile"></i><span>Mood</span>
+        <% end %>
+      </li>
+
+      <li class="footer-item">
+        <%# UPDATED: Points to /questions now %>
+        <%= link_to questions_path, class: "footer-link #{'active' if current_page?(questions_path)}" do %>
+          <i class="fas fa-message"></i><span>Chat</span>
+        <% end %>
+      </li>
+
+      <li class="footer-item">
+        <%# Dashboard Link %>
+        <%= link_to dashboard_path, class: "footer-link #{'active' if current_page?(dashboard_path)}" do %>
+          <i class="fas fa-book-open"></i><span>Dashboard</span>
+        <% end %>
+      </li>
+
+      <li class="footer-item">
+        <%# History Link %>
+        <%= link_to journal_entries_path, class: "footer-link #{'active' if current_page?(journal_entries_path)}" do %>
+          <i class="fas fa-user"></i><span>History</span>
+        <% end %>
+      </li>
+
+    </ul>
+  </div>
+</div>

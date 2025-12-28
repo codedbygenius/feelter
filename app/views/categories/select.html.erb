@@ -1,2 +1,142 @@
-<h1>Categories#select</h1>
-<p>Find me in app/views/categories/select.html.erb</p>
+<!--<div class="category-selection">
+  <div class="container">
+    <div class="category-header fade-in-up">
+      <h1>What do you need right now?</h1>
+      <div class="mood-indicator mt-3">
+        <span class="emoji"><%#= Mood::FEELING_EMOJIS[@current_mood.feeling] %></span>
+        <span>Feeling <%#= @current_mood.feeling %></span>
+      </div>
+    </div>
+
+    <div class="category-grid">
+      <%# @categories.each_with_index do |category, index| %>-->
+<!--        <div class="fade-in-up" style="animation-delay: <%#= index * 0.1 %>s;">-->
+          <%#= link_to select_content_type_path(category_id: category.id), class: "text-decoration-none" do %>
+<!--            <div class="category-card <%#= category.name %>">
+              <div class="card-content">
+                <%# if @recommended_category_ids.include?(category.id) %>-->
+<!--                  <span class="badge">⭐ Recommended for you</span>-->
+                <%# end %>
+<!--                <div class="category-icon">-->
+                  <%#= case category.name
+                      when 'uplifting' then '🌟'
+                      when 'calming' then '🧘'
+                      when 'motivational' then '💪'
+                      when 'serious' then '🤔'
+                      end %>
+<!--                </div>
+                <h3><%#= category.name %></h3>
+              </div>
+            </div>
+          <%# end %>-->
+<!--        </div>-->
+      <%# end %>
+<!--    </div>
+  </div>
+</div>
+-->
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Quicksand:wght@300..600&display=swap" rel="stylesheet">
+
+<style>
+  .font-handwritten { font-family: 'Caveat', cursive !important; }
+  .font-clean { font-family: 'Quicksand', sans-serif !important; }
+
+  .sketch-container {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    min-height: 100vh; background-color: #fcfaf7;
+    background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
+    position: relative; padding: 40px 20px; text-align: center;
+  }
+
+  /* Category Cards as colorful Post-its */
+  .category-card {
+    appearance: none; background: transparent; cursor: pointer; transition: all 0.3s ease;
+    border: 2px solid #2d3748; padding: 2rem 1rem; width: 180px;
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    border-radius: 2px; /* Post-it shape */
+  }
+
+  .cat-uplifting { background: #fef3c7; transform: rotate(-1deg); } /* Yellow */
+  .cat-calming   { background: #d1fae5; transform: rotate(2deg); }  /* Green */
+  .cat-motivational { background: #ffedd5; transform: rotate(-2deg); } /* Orange */
+  .cat-serious   { background: #e0e7ff; transform: rotate(1deg); }  /* Blue */
+
+  .category-card:hover {
+    transform: scale(1.1) rotate(0deg) !important;
+    box-shadow: 8px 8px 0px #2d3748;
+    z-index: 20;
+  }
+
+  .btn-back {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 24px;
+    border: 1px solid #e2e8f0;
+    border-radius: 999px;
+    background: white;
+    color: #94a3b8;
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    margin-top: 40px;
+  }
+
+  .btn-back:hover {
+    border-color: #fecaca;
+    color: #fca5a5;
+    background: #fff1f2;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(254, 202, 202, 0.2);
+  }
+
+  .btn-back-icon {
+    margin-right: 8px;
+    font-size: 14px;
+  }
+</style>
+
+<main class="sketch-container">
+  <div class="absolute top-8 left-8">
+    <h3 class="text-2xl font-handwritten text-slate-700">FEELTER 🍃</h3>
+  </div>
+
+  <div class="max-w-4xl w-full z-10">
+    <div class="mb-12">
+      <h1 class="text-6xl font-handwritten text-slate-800 mb-2 text-balance">What do you need right now?</h1>
+      <p class="text-xl font-clean text-slate-500 italic">Choose an intention for your session</p>
+    </div>
+
+    <div class="flex flex-wrap justify-center gap-6">
+      <%# Uplifting %>
+      <%= link_to select_content_type_path(category: 'uplifting'), class: "category-card cat-uplifting" do %>
+        <span class="text-4xl">☀️</span>
+        <span class="font-clean font-bold text-slate-800">Uplifting</span>
+      <% end %>
+
+      <%# Calming %>
+      <%= link_to select_content_type_path(category: 'calming'), class: "category-card cat-calming" do %>
+        <span class="text-4xl">🌊</span>
+        <span class="font-clean font-bold text-slate-800">Calming</span>
+      <% end %>
+
+      <%# Motivational %>
+      <%= link_to select_content_type_path(category: 'motivational'), class: "category-card cat-motivational" do %>
+        <span class="text-4xl">🚀</span>
+        <span class="font-clean font-bold text-slate-800">Motivational</span>
+      <% end %>
+
+      <%# Serious %>
+      <%= link_to select_content_type_path(category: 'serious'), class: "category-card cat-serious" do %>
+        <span class="text-4xl">🧠</span>
+        <span class="font-clean font-bold text-slate-800">Serious</span>
+      <% end %>
+    </div>
+  </div>
+  <div class="text-center mt-17 pb-20">
+    <%# Direct link to the mood selection page %>
+    <a href="/mood/select" class="btn-back font-clean">
+      <span class="btn-back-icon">←</span> Change my mood
+    </a>
+  </div>
+</main>

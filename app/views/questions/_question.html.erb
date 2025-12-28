@@ -1,0 +1,20 @@
+<div class="flex flex-col gap-4">
+  <%# User Question - Right Aligned %>
+  <div class="flex justify-end">
+    <div class="bg-slate-800 text-white p-4 rounded-2xl rounded-tr-none max-w-[80%] shadow-sm">
+      <p class="text-sm"><%= question.user_question %></p>
+    </div>
+  </div>
+
+  <%# AI Answer - Left Aligned %>
+  <div class="flex justify-start">
+    <div class="bg-white border border-slate-200 p-4 rounded-2xl rounded-tl-none max-w-[85%] shadow-sm text-slate-700">
+      <span class="text-[10px] font-bold text-rose-400 uppercase tracking-widest block mb-2"></span>
+      <% if question.ai_answer.present? %>
+        <%= simple_format(question.ai_answer) %>
+      <% else %>
+        <p class="italic text-slate-400">Thinking...</p>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,143 @@
+<!--<div class="journal-container">
+  <div class="container" style="max-width: 800px;">
+    <div class="journal-header fade-in-up">
+      <h1>New Journal Entry</h1>
+      <p>How are you feeling right now?</p>
+    </div>
+
+    <%#= simple_form_for @journal_entry do |f| %>-->
+<!--      <div class="content-card fade-in-up" style="animation-delay: 0.1s;">-->
+        <%# if @mood %>
+          <%#= f.input :mood_id, as: :hidden, input_html: { value: @mood.id } %>
+<!--          <div class="mb-4 p-3" style="background: #f7fafc; border-radius: 12px;">
+            <strong>Current Mood:</strong>
+            <span style="font-size: 1.5rem;"><%#= Mood::FEELING_EMOJIS[@mood.feeling] %></span>
+            <%#= @mood.feeling.capitalize %>-->
+<!--          </div>-->
+        <%# else %>
+          <%#= f.association :mood,
+              collection: current_user.moods.order(created_at: :desc).limit(10),
+              label_method: lambda { |m| "#{Mood::FEELING_EMOJIS[m.feeling]} #{m.feeling.capitalize} - #{m.created_at.strftime('%b %d, %Y')}" },
+              prompt: "Select a mood",
+              input_html: { class: 'form-select' },
+              wrapper_html: { class: 'mb-4' } %>
+        <%# end %>
+<!---->
+        <%#= f.input :note,
+            as: :text,
+            input_html: { rows: 10, placeholder: "What's on your mind? How are you feeling? What happened today?", class: 'form-control', style: 'border-radius: 12px; border: 2px solid #e2e8f0; padding: 1rem;' },
+            label: "Your thoughts",
+            wrapper_html: { class: 'mb-4' } %>
+<!--
+        <div class="d-flex justify-content-between gap-3">
+          <%#= link_to "Cancel", journal_entries_path, class: "btn btn-secondary" %>-->
+          <%#= f.submit "Save Entry", class: "btn btn-primary" %>
+<!--        </div>
+      </div>
+    <%# end %>-->
+<!--  </div>
+</div>
+-->
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Quicksand:wght@300..600&display=swap" rel="stylesheet">
+
+<style>
+  .font-handwritten { font-family: 'Caveat', cursive !important; }
+  .font-clean { font-family: 'Quicksand', sans-serif !important; }
+
+  .journal-bg {
+    min-height: 100vh; background-color: #fcfaf7;
+    background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
+    padding: 60px 20px;
+  }
+
+  /* Lined Paper Effect for the Textarea */
+  .lined-paper {
+    background: #fff;
+    background-image: linear-gradient(#e1e9f0 1.1px, transparent 1.1px);
+    background-size: 100% 3rem;
+    line-height: 3rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-family: 'Caveat', cursive;
+    font-size: 1.8rem;
+    color: #334155;
+    width: 100%;
+    min-height: 400px;
+    outline: none;
+    resize: none;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  }
+
+  .mood-badge-sketch {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 20px;
+    border: 2px dashed #cbd5e1;
+    border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+    background: white;
+  }
+
+  .btn-save-journal {
+    background: #2d3748;
+    color: white;
+    padding: 12px 40px;
+    border-radius: 9999px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+  }
+
+  .btn-save-journal:hover {
+    background: #1a202c;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  }
+</style>
+
+<main class="journal-bg">
+  <div class="max-w-3xl mx-auto">
+
+    <div class="mb-8">
+      <%= link_to "← Back to Dashboard", dashboard_path, class: "font-clean text-slate-400 hover:text-slate-600 no-underline" %>
+    </div>
+
+    <div class="mb-12 text-center">
+      <h1 class="text-6xl font-handwritten text-slate-800 mb-4">Dear Diary...</h1>
+
+      <%# Dynamic Mood Badge %>
+      <div class="mood-badge-sketch">
+        <span class="text-2xl">
+          <%= { 'happy' => '😊', 'sad' => '😢', 'meh' => '😐' }[@mood&.feeling] || '🍃' %>
+        </span>
+        <span class="font-clean text-slate-500 font-medium">
+          Feeling <strong><%= @mood&.feeling&.capitalize || "Mindful" %></strong> right now
+        </span>
+      </div>
+    </div>
+
+ <%= form_with model: @journal_entry, local: true do |f| %>
+
+  <div class="mb-6 text-center">
+    <p class="font-clean text-slate-400 uppercase tracking-widest text-sm">
+      <%= Time.current.strftime("%A, %B %d") %>
+    </p>
+  </div>
+
+  <div class="mb-8">
+    <%= f.text_area :content,
+        class: "lined-paper",
+        placeholder: "What's on your heart? Let it all out here...",
+        rows: 10 %>
+  </div>
+
+  <div class="flex items-center justify-between">
+    <%= link_to "Cancel", dashboard_path, class: "font-clean text-slate-400 hover:text-rose-400 transition-colors" %>
+    <%= f.submit "Save Reflection", class: "btn-save-journal font-clean" %>
+  </div>
+<% end %>
+
+  </div>
+</main>

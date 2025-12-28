@@ -1,0 +1,9 @@
+<%= turbo_stream.append "questions", render(@question) %>
+
+<%# 2. Clear the input field so you can type the next question %>
+<%= turbo_stream.replace "chat-form" do %>
+  <%= form_with(model: Question.new, id: "chat-form", class: "flex gap-2 bg-white p-2 rounded-full shadow-sm border border-slate-100") do |f| %>
+    <%= f.text_field :user_question, placeholder: "What's on your mind?", class: "flex-1 border-none focus:ring-0 font-clean px-4 rounded-full" %>
+    <%= f.submit "Ask", class: "bg-slate-800 text-white px-6 py-2 rounded-full font-bold hover:bg-rose-400 transition-all cursor-pointer" %>
+  <% end %>
+<% end %>

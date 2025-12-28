@@ -1,0 +1,120 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Quicksand:wght@300..600&display=swap" rel="stylesheet">
+
+<style>
+  .font-handwritten { font-family: 'Caveat', cursive !important; }
+  .font-clean { font-family: 'Quicksand', sans-serif !important; }
+
+  /* This part forces the page to ignore parent padding and center perfectly */
+  .sketch-wrapper {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: calc(100vh - 70px);
+    background-color: #fcfaf7;
+    background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+  .journal-card {
+    background: white;
+    border: 2px solid #2d3748;
+    border-radius: 15px 225px 15px 255px/255px 15px 225px 15px;
+    padding: 2rem;
+    width: 90%; /* Responsive width */
+    max-width: 350px;
+    box-shadow: 6px 6px 0px #2d3748;
+    margin: 20px auto;
+    text-align: center; /* Ensures content inside card is centered */
+  }
+
+  .back-link-container {
+    width: 90%;
+    max-width: 350px;
+    text-align: left;
+    margin-top: 10px;
+  }
+
+  .back-link {
+    text-decoration: none;
+    color: #64748b;
+    font-size: 1rem;
+  }
+
+  .entry-emoji {
+    font-size: 4.5rem;
+    margin-bottom: 10px;
+    line-height: 1;
+    display: block;
+  }
+
+  .delete-link {
+    color: #94a3b8;
+    text-decoration: none;
+    font-size: 0.85rem;
+    margin-top: 25px;
+    display: inline-block;
+  }
+</style>
+
+<main class="sketch-wrapper">
+
+  <div class="back-link-container font-clean">
+    <%= link_to journal_entries_path, class: "back-link" do %>
+      ← Back to Journal
+    <% end %>
+  </div>
+
+  <div class="journal-card">
+    <div class="entry-emoji">
+      <%
+         mood_obj = @journal_entry.mood
+         # This checks common column names for the mood text
+         mood_text = if mood_obj.respond_to?(:feeling)
+                       mood_obj.feeling
+                     elsif mood_obj.respond_to?(:name)
+                       mood_obj.name
+                     elsif mood_obj.respond_to?(:label)
+                       mood_obj.label
+                     end
+         mood_text = mood_text&.downcase
+      %>
+
+      <%= case mood_text
+          when 'happy' then '😊'
+          when 'sad'   then '😢'
+          when 'meh'   then '😐'
+          else '🍃'
+          end %>
+    </div>
+
+    <h2 class="text-3xl font-handwritten text-slate-800 capitalize mb-1">
+      <%= mood_text || "My Reflection" %>
+    </h2>
+
+    <p class="text-xs font-clean text-slate-400 mb-6 uppercase tracking-widest">
+      <%= @journal_entry.created_at.strftime("%B %d, %Y") %>
+    </p>
+
+    <div class="text-left border-t border-b border-dashed border-slate-200 py-4 my-4">
+      <h4 class="font-handwritten text-xl text-slate-700 mb-2">My Reflection:</h4>
+      <p class="font-clean text-slate-600 italic leading-relaxed">
+        "<%= @journal_entry.note %>"
+      </p>
+    </div>
+
+    <%= link_to "Delete Entry", journal_entry_path(@journal_entry),
+        data: { turbo_method: :delete, turbo_confirm: "Are you sure?" },
+        class: "delete-link font-clean" %>
+  </div>
+
+</main>

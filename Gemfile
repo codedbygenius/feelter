@@ -24,6 +24,20 @@ gem "solid_cable"
 gem 'devise'
 gem 'simple_form'
 gem 'kaminari'
+gem 'httparty'
+gem 'dotenv-rails', groups: [:development, :test]
+gem 'sidekiq'
+gem 'redis'
+gem 'rspotify'
+gem 'chartkick'
+gem 'groupdate'
+gem 'httparty'
+gem 'dotenv-rails', groups: [:development, :test]
+
+# Charts for analytics
+gem 'chartkick'
+gem 'groupdate'
+
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
@@ -57,4 +71,13 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
+  gem 'gemini-ai'
+  gem 'gemini-ai'
+  gem "chartkick"
+  gem "groupdate"
+  gem "ruby-openai"
+  gem "turbo-rails"
+  gem "turbo-rails"
 end
+
+gem "tailwindcss-rails", "~> 4.4"

@@ -1,0 +1,11 @@
+.content-type-card {
+  transition: all 0.3s ease;
+  border: 2px solid #e0e0e0;
+  background: white;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    border-color: #007bff;
+  }
+}

@@ -1,0 +1,120 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Quicksand:wght@300..600&display=swap" rel="stylesheet">
+
+<style>
+  .font-handwritten { font-family: 'Caveat', cursive !important; }
+  .font-clean { font-family: 'Quicksand', sans-serif !important; }
+
+  .sketch-wrapper {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    min-height: calc(100vh - 70px);
+    background-color: #fcfaf7;
+    background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .chat-container {
+    width: 100%;
+    max-width: 450px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    margin-bottom: 120px;
+    padding-bottom: 20px;
+  }
+
+  .chat-bubble {
+    padding: 1rem 1.2rem;
+    border: 2px solid #2d3748;
+    box-shadow: 4px 4px 0px #2d3748;
+    max-width: 85%;
+    position: relative;
+  }
+
+  .bot-message {
+    align-self: flex-start;
+    background: white;
+    border-radius: 15px 225px 15px 255px/255px 15px 225px 15px;
+    transform: rotate(-0.5deg);
+  }
+
+  .user-message {
+    align-self: flex-end;
+    background: #fef3c7;
+    border-radius: 225px 15px 255px 15px/15px 225px 15px 255px;
+    transform: rotate(0.5deg);
+  }
+
+  .chat-input-wrapper {
+    position: fixed;
+    bottom: 90px;
+    width: 95%;
+    max-width: 450px;
+    z-index: 50;
+  }
+
+  .sketch-input {
+    width: 100%;
+    padding: 15px 50px 15px 20px;
+    border: 2px solid #2d3748;
+    border-radius: 10px 50px 10px 50px/50px 10px 50px 10px;
+    font-family: 'Quicksand', sans-serif;
+    box-shadow: 5px 5px 0px #2d3748;
+    background: white;
+    outline: none;
+  }
+</style>
+
+<main class="sketch-wrapper">
+
+  <div class="text-center mb-6">
+    <h1 class="text-5xl font-handwritten text-slate-800">Feelter Chat 🍃</h1>
+    <p class="font-clean text-slate-400 italic text-sm">A safe space to talk</p>
+  </div>
+
+  <div class="chat-container">
+    <%# Bot Welcome Message %>
+    <div class="chat-bubble bot-message">
+      <p class="font-clean text-slate-700 text-sm">Hi! I'm here to listen. What's on your mind? ✨</p>
+    </div>
+
+    <% @questions&.each do |q| %>
+      <%# User Message - using user_question %>
+      <% if q.user_question.present? %>
+        <div class="chat-bubble user-message">
+          <p class="font-clean text-slate-800 text-sm"><%= q.user_question %></p>
+        </div>
+      <% end %>
+
+      <%# AI Message - using ai_answer %>
+      <% if q.ai_answer.present? %>
+        <div class="chat-bubble bot-message">
+          <p class="font-clean text-slate-700 text-sm"><%= q.ai_answer %></p>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="chat-input-wrapper">
+    <%= form_with model: Question.new, url: questions_path, local: true do |f| %>
+      <div class="relative">
+        <%# FIXED: Points to user_question column %>
+        <%= f.text_field :user_question, placeholder: "Type something...", class: "sketch-input", autocomplete: "off" %>
+        <button type="submit" class="absolute right-5 top-1/2 -translate-y-1/2 text-slate-800 text-lg">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+    <% end %>
+  </div>
+
+</main>

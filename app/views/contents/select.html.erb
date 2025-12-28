@@ -1,2 +1,140 @@
-<h1>Contents#select</h1>
-<p>Find me in app/views/contents/select.html.erb</p>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Quicksand:wght@300..600&display=swap" rel="stylesheet">
+
+<style>
+  .font-handwritten { font-family: 'Caveat', cursive !important; }
+  .font-clean { font-family: 'Quicksand', sans-serif !important; }
+
+  .select-container {
+    min-height: 100vh;
+    background-color: #fcfaf7;
+    background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
+    padding: 80px 20px;
+  }
+
+  /* The 2x2 Grid */
+  .selection-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 640px) {
+    .selection-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .select-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 40px 20px;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .select-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    border-color: #fecaca;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
+  }
+
+  .select-card::before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    width: 80px;
+    height: 25px;
+    background: rgba(254, 243, 199, 0.6);
+    transform: rotate(-2deg);
+    z-index: 1;
+  }
+
+  .icon-circle {
+    width: 60px;
+    height: 60px;
+    background: #fff1f2;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    font-size: 28px;
+  }
+  .btn-back {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 20px;
+    border: 1px solid #e2e8f0;
+    border-radius: 999px;
+    background: white;
+    color: #94a3b8;
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  }
+
+  .btn-back:hover {
+    border-color: #fecaca; /* Rose accent */
+    color: #fca5a5;
+    background: #fff1f2;
+    transform: translateX(-4px); /* Subtle nudge to the left */
+  }
+
+  .btn-back-icon {
+    margin-right: 8px;
+    font-size: 12px;
+  }
+</style>
+
+<main class="select-container">
+  <div class="text-center mb-16">
+<!--    <h3 class="font-clean text-slate-400 uppercase tracking-widest text-sm mb-2">Step Two</h3>
+-->    <h1 class="font-handwritten text-6xl text-slate-800">What do you need right now?</h1>
+    <p class="font-clean text-slate-400 italic mt-4">Select a medium for your <%= params[:category] %> journey</p>
+  </div>
+
+  <div class="selection-grid">
+    <%# Direct URL links to avoid NoMethodError %>
+
+    <a href="/content/show?category=<%= params[:category] %>&content_type=quote" class="select-card">
+      <div class="icon-circle">✨</div>
+      <h2 class="font-handwritten text-3xl text-slate-800">Words</h2>
+      <p class="font-clean text-xs text-slate-400 mt-2 uppercase tracking-tighter">Quotes & Wisdom</p>
+    </a>
+
+    <a href="/content/show?category=<%= params[:category] %>&content_type=music" class="select-card">
+      <div class="icon-circle">🎧</div>
+      <h2 class="font-handwritten text-3xl text-slate-800">Sound</h2>
+      <p class="font-clean text-xs text-slate-400 mt-2 uppercase tracking-tighter">Music & Ambience</p>
+    </a>
+
+    <a href="/content/show?category=<%= params[:category] %>&content_type=picture" class="select-card">
+      <div class="icon-circle">🎨</div>
+      <h2 class="font-handwritten text-3xl text-slate-800">Visuals</h2>
+      <p class="font-clean text-xs text-slate-400 mt-2 uppercase tracking-tighter">Art & Nature</p>
+    </a>
+
+    <a href="/content/show?category=<%= params[:category] %>&content_type=blog" class="select-card">
+      <div class="icon-circle">📖</div>
+      <h2 class="font-handwritten text-3xl text-slate-800">Stories</h2>
+      <p class="font-clean text-xs text-slate-400 mt-2 uppercase tracking-tighter">Brief Reflections</p>
+    </a>
+  </div>
+
+  <div class="text-center mt-16 pb-12">
+    <%= link_to :back, class: "btn-back font-clean" do %>
+      <span class="btn-back-icon">←</span> Change my preference
+    <% end %>
+  </div>
+</main>

@@ -1,22 +1,29 @@
 Rails.application.routes.draw do
-  get "contents/select"
-  get "contents/show"
-  get "categories/select"
-  get "moods/select"
-  get "moods/create"
-  get "pages/home"
-  get "pages/dashboard"
+  # 1. The Root Page
+  root to: "pages#home"
+
+  # 2. Authentication
   devise_for :users
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
-  get "up" => "rails/health#show", as: :rails_health_check
+  # 3. The Dashboard (Fixed and Clean)
+  get "dashboard", to: "pages#dashboard", as: :dashboard
 
-  # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
-  # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
-  # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
+  # 4. Mood selection flow
+  get "mood/select", to: "moods#select", as: :select_mood
+  post "mood/create", to: "moods#create", as: :create_mood
 
-  # Defines the root path route ("/")
-  # root "posts#index"
+  # 5. Category selection
+  get "category/select", to: "categories#select", as: :select_category
+
+  # 6. Content type selection and display
+  get "content/select", to: "contents#select", as: :select_content_type
+  get "content/show", to: "contents#show", as: :show_content
+
+  # 7. Journal entries
+  resources :questions, only: [:index, :create]
+  resources :journal_entries, only: [:index, :new, :create, :show, :destroy] do
+    collection do
+      get :analytics
+    end
+  end
 end

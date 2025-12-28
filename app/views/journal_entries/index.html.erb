@@ -1,0 +1,119 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Quicksand:wght@300..600&display=swap" rel="stylesheet">
+
+<style>
+  .font-handwritten { font-family: 'Caveat', cursive !important; }
+  .font-clean { font-family: 'Quicksand', sans-serif !important; }
+
+  /* Centers the content regardless of parent containers */
+  .sketch-wrapper {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    min-height: calc(100vh - 70px);
+    background-color: #fcfaf7;
+    background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
+    padding: 60px 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .journal-grid {
+    display: grid;
+    grid-template-cols: 1fr;
+    gap: 2rem;
+    width: 100%;
+    max-width: 400px; /* Kept narrow to match the centered square aesthetic */
+  }
+
+  /* Your original hand-drawn style applied to index cards */
+  .entry-card {
+    background: white;
+    border: 2px solid #2d3748;
+    border-radius: 15px 225px 15px 255px/255px 15px 225px 15px;
+    padding: 1.5rem;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    box-shadow: 4px 4px 0px #2d3748;
+    transition: all 0.3s ease;
+    background-color: white;
+  }
+
+  /* Alternating tilts like your previous design */
+  .entry-card:nth-child(even) { transform: rotate(1deg); }
+  .entry-card:nth-child(odd) { transform: rotate(-1.5deg); }
+
+  .entry-card:hover {
+    transform: scale(1.03) rotate(0deg) !important;
+    background-color: #fef3c7; /* Your highlighter yellow hover */
+    box-shadow: 8px 8px 0px #2d3748;
+    z-index: 10;
+  }
+
+  .mood-tag {
+    font-size: 0.8rem;
+    padding: 2px 10px;
+    border-radius: 999px;
+    background: #f1f5f9;
+    color: #64748b;
+    border: 1px solid #2d3748;
+    font-family: 'Quicksand', sans-serif;
+  }
+</style>
+
+<main class="sketch-wrapper">
+  <div class="w-full max-w-lg">
+
+    <div class="text-center mb-12">
+      <h1 class="text-6xl font-handwritten text-slate-800 mb-2">Your Reflections</h1>
+      <p class="font-clean text-slate-400 italic">A safe space for your thoughts</p>
+      <div class="mt-6">
+        <%= link_to "+ New Entry", select_mood_path, class: "font-clean px-6 py-2 border-2 border-slate-800 rounded-full hover:bg-slate-800 hover:text-white transition-all inline-block" %>
+      </div>
+    </div>
+
+    <% if @journal_entries.any? %>
+      <div class="journal-grid">
+        <% @journal_entries.each do |entry| %>
+          <%= link_to journal_entry_path(entry), class: "entry-card" do %>
+            <div class="flex justify-between items-start mb-4">
+              <span class="font-clean text-xs text-slate-400 uppercase tracking-widest">
+                <%= entry.created_at.strftime("%b %d, %Y") %>
+              </span>
+
+              <%# Safe mood check using the logic we found earlier %>
+              <%
+                m_obj = entry.mood
+                m_text = m_obj.respond_to?(:feeling) ? m_obj.feeling : (m_obj.respond_to?(:name) ? m_obj.name : "Mood")
+              %>
+              <span class="mood-tag"><%= m_text %></span>
+            </div>
+
+            <h3 class="text-2xl font-handwritten text-slate-700 mb-2">
+              Reflection from <%= entry.created_at.strftime("%B %d") %>
+            </h3>
+
+            <p class="font-clean text-slate-500 text-sm leading-relaxed line-clamp-2 italic">
+              <%# Fixed to use .note based on your db check %>
+              "<%= truncate(entry.note, length: 80) %>"
+            </p>
+          <% end %>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="text-center py-24">
+        <div class="text-6xl mb-4">✍️</div>
+        <p class="font-handwritten text-3xl text-slate-400">The pages are waiting...</p>
+        <%= link_to "Write your first entry", select_mood_path, class: "text-rose-400 underline mt-4 inline-block font-clean" %>
+      </div>
+    <% end %>
+
+  </div>
+</main>

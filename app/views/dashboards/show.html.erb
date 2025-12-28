@@ -1,0 +1,19 @@
+<div class="mood-trends-container">
+  <h3>Mood Trends</h3>
+
+  <% if current_user.moods.any? %>
+    <%= line_chart current_user.moods.group_by_day(:created_at).count,
+          xtitle: "Days", ytitle: "Check-ins",
+          colors: ["#b4a7d6"],
+          library: {
+            scales: {
+              y: { ticks: { stepSize: 1 } }
+            }
+          } %>
+  <% else %>
+    <div class="empty-state">
+      <p>No mood data yet. Your journey begins with a single reflection.</p>
+      <%= link_to "Check in now", select_mood_path, class: "btn-zen" %>
+    </div>
+  <% end %>
+</div>

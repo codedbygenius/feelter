@@ -1,2 +1,157 @@
-<h1>Contents#show</h1>
-<p>Find me in app/views/contents/show.html.erb</p>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Quicksand:wght@300..600&display=swap" rel="stylesheet">
+
+<style>
+  .font-handwritten { font-family: 'Caveat', cursive !important; }
+  .font-clean { font-family: 'Quicksand', sans-serif !important; }
+
+  .sketch-container {
+    min-height: 100vh;
+    background-color: #fcfaf7;
+    background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
+    padding: 60px 20px;
+  }
+
+  /* Grid for Pictures, Stack for others */
+  .content-layout-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  /* Special grid just for the picture view to prevent overlaps */
+  .picture-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2.5rem;
+  }
+
+  .content-result-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 2.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+    position: relative;
+    height: 100%; /* Ensures grid items stay same height */
+  }
+
+  /* Washi Tape Effect */
+  .content-result-card::before {
+    content: "";
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-1deg);
+    width: 100px;
+    height: 28px;
+    background: rgba(254, 243, 199, 0.8);
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.03);
+    z-index: 5;
+  }
+
+  .zen-notebook-page {
+    background: white;
+    background-image: linear-gradient(#f1f5f9 1px, transparent 1px);
+    background-size: 100% 2.8rem;
+    line-height: 2.8rem;
+    padding: 1.5rem 2rem;
+    border-left: 3px solid #fecaca;
+    margin: 1rem 0;
+  }
+
+  .content-result-card:hover { transform: translateY(-4px); }
+
+  /* Ensure images fit perfectly */
+  .picture-frame {
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+  }
+
+  .picture-frame img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    display: block;
+  }
+
+  .btn-finish {
+    display: inline-block;
+    padding: 14px 40px;
+    border: 2px solid #2d3748;
+    border-radius: 9999px;
+    text-decoration: none;
+    color: #2d3748;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+  .btn-finish:hover { background: #2d3748; color: white; }
+</style>
+
+<main class="sketch-container">
+  <div class="text-center mb-16 max-w-2xl mx-auto">
+    <h3 class="text-sm font-clean text-slate-400 uppercase tracking-[0.2em] mb-4">Curated for your heart</h3>
+    <h1 class="text-6xl md:text-7xl font-handwritten text-slate-800 mb-6">
+      A little <span class="text-rose-400"><%= params[:category] %></span> for you
+    </h1>
+    <div class="h-1 w-20 bg-rose-200 mx-auto rounded-full"></div>
+  </div>
+
+  <div class="max-w-6xl mx-auto">
+    <% if @contents.any? %>
+      <%# Detect if we should use grid or single column stack %>
+      <div class="<%= @type == 'picture' ? 'picture-grid' : 'content-layout-wrapper' %>">
+        <% @contents.each do |content| %>
+          <div class="content-result-card">
+            <% case @type %>
+            <% when 'quote' %>
+              <blockquote class="text-2xl md:text-4xl font-handwritten text-slate-700 italic text-center leading-snug">
+                “<%= content.blog %>”
+                <cite class="block mt-6 text-base font-clean not-italic text-slate-400">— <%= content.title %></cite>
+              </blockquote>
+
+            <% when 'music' %>
+              <div class="text-center mb-4">
+                <h4 class="text-2xl font-handwritten text-slate-800"><%= content.title %></h4>
+                <p class="font-clean text-sm text-slate-400 italic"><%= content.blog %></p>
+              </div>
+              <div class="rounded-xl overflow-hidden shadow-sm border border-slate-100">
+                <iframe src="<%= content.try(:embed_url) || content.url %>" width="100%" height="352" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" style="border-radius:12px"></iframe>
+              </div>
+
+            <% when 'picture' %>
+              <div class="picture-frame">
+                <img src="<%= content.url %>" alt="Feelter visual">
+              </div>
+              <p class="font-handwritten text-2xl text-slate-500 text-center"><%= content.blog %></p>
+
+            <% when 'blog' %>
+              <div class="text-center mb-10">
+                <h4 class="text-4xl font-handwritten text-slate-800 tracking-tight"><%= content.title %></h4>
+                <div class="h-px w-24 bg-rose-200 mx-auto mt-4"></div>
+              </div>
+              <div class="zen-notebook-page">
+                <div class="font-clean text-slate-700 zen-content text-lg leading-relaxed">
+                  <%= simple_format(content.blog) %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="text-center py-20">
+        <p class="font-clean text-xl text-slate-400">Our library is currently resting. Try a different intention?</p>
+      </div>
+    <% end %>
+
+    <div class="text-center mt-12 pb-24">
+      <%= link_to "Finish Session", dashboard_path, class: "btn-finish font-clean" %>
+      <div class="mt-8">
+        <%= link_to "← I need something else", :back, class: "text-slate-400 font-clean text-sm hover:underline" %>
+      </div>
+    </div>
+  </div>
+</main>

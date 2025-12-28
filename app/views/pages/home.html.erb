@@ -1,2 +1,76 @@
-<h1>Pages#home</h1>
-<p>Find me in app/views/pages/home.html.erb</p>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Quicksand:wght@300..600&display=swap" rel="stylesheet">
+
+<style>
+  /* Fallbacks in case Tailwind classes don't load immediately */
+  .font-handwritten { font-family: 'Caveat', cursive !important; }
+  .font-clean { font-family: 'Quicksand', sans-serif !important; }
+
+  .sketch-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 100vh;
+    background-color: #fcfaf7;
+    background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
+    position: relative;
+    overflow: hidden;
+  }
+
+  .sketch-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 40px;
+    border: 2px solid #1e293b;
+    border-radius: 9999px;
+    text-decoration: none;
+    color: #1e293b;
+    font-size: 1.25rem;
+    transition: all 0.3s ease;
+  }
+
+  .sketch-button:hover {
+    background-color: #1e293b;
+    color: white;
+  }
+</style>
+
+<main class="sketch-container px-6">
+
+  <div class="absolute top-8 left-8">
+    <h3 class="text-2xl font-handwritten text-slate-700 tracking-tight">
+      FEELTER <span class="text-xl">🍃</span>
+    </h3>
+  </div>
+
+  <div class="max-w-4xl mx-auto z-10">
+    <h1 class="text-7xl md:text-9xl font-handwritten text-slate-800 mb-6 leading-none">
+      Check in with yourself
+    </h1>
+
+    <p class="text-2xl font-clean text-slate-500 font-light mb-12 italic">
+      Select your current feeling
+    </p>
+
+    <%# The actual Rails path helper is now included below %>
+    <%= link_to select_mood_path, class: "sketch-button font-clean" do %>
+      <span>Start Your Journey</span>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="24" height="24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+      </svg>
+    <% end %>
+  </div>
+
+  <div class="absolute bottom-0 left-0 w-full opacity-30 pointer-events-none">
+    <svg viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: auto;">
+      <path fill="none" stroke="#2d3748" stroke-width="2" d="M0,160 C240,240 480,80 720,160 C960,240 1200,80 1440,160" stroke-dasharray="8,8" />
+      <path fill="none" stroke="#2d3748" stroke-width="1.5" d="M0,200 C300,280 600,120 900,200 C1200,280 1500,120 1800,200" opacity="0.5" stroke-dasharray="5,5" />
+    </svg>
+  </div>
+
+</main>

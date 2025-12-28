@@ -1,2 +1,121 @@
-<h1>Pages#dashboard</h1>
-<p>Find me in app/views/pages/dashboard.html.erb</p>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Quicksand:wght@300..600&display=swap" rel="stylesheet">
+
+<style>
+  .font-handwritten { font-family: 'Caveat', cursive !important; }
+  .font-clean { font-family: 'Quicksand', sans-serif !important; }
+
+  .dashboard-container {
+    min-height: 100vh; background-color: #fcfaf7;
+    background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
+    padding: 60px 20px;
+  }
+
+  .stat-card {
+    background: white; border: 1px solid #e2e8f0; border-radius: 12px;
+    padding: 1.5rem; transition: transform 0.3s ease;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  }
+
+  .journal-preview-card {
+    background: white; border-left: 4px solid #fecaca; /* Rose accent */
+    padding: 1rem; margin-bottom: 1rem; border-radius: 4px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.02);
+  }
+</style>
+
+<main class="dashboard-container">
+  <div class="max-w-6xl mx-auto">
+
+    <%# Header Section %>
+    <div class="mb-12">
+      <h1 class="text-6xl font-handwritten text-slate-800">Hello, <%= current_user.email.split('@').first.capitalize %></h1>
+      <p class="font-clean text-slate-400 italic text-xl">Here is how your heart has been traveling...</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+      <%# LEFT COLUMN: Mood Trends & Graph %>
+      <div class="lg:col-span-1 space-y-6">
+        <h2 class="text-3xl font-handwritten text-slate-700 mb-4">Mood Trends</h2>
+
+        <div class="stat-card">
+          <h4 class="font-clean text-xs text-slate-400 mb-4 uppercase tracking-widest">Activity Flow</h4>
+          <% if @mood_data.present? && @mood_data.any? %>
+            <%# FIXED: Added adapter: "google" to solve the Date Adapter error %>
+            <%= line_chart @mood_data,
+                  height: "200px",
+                  adapter: "google",
+                  colors: ["#fecaca"],
+                  points: true,
+                  curve: true,
+                  library: {
+                    backgroundColor: "transparent",
+                    chartArea: { width: '90%', height: '70%' },
+                    hAxis: { gridlines: { color: 'transparent' }, textStyle: { color: '#94a3b8', fontSize: 10 } },
+                    vAxis: { gridlines: { color: '#f1f5f9' }, baselineColor: '#e2e8f0', textStyle: { color: '#94a3b8', fontSize: 10 } },
+                    legend: { display: false }
+                  } %>
+          <% else %>
+            <div class="text-center py-8">
+              <p class="font-clean text-slate-400 italic text-sm">No heart-travel data yet.</p>
+            </div>
+          <% end %>
+        </div>
+
+        <%# Specific Mood Breakdown Cards %>
+        <div class="space-y-3">
+          <% if @mood_counts.present? %>
+            <% @mood_counts.each do |feeling_key, count| %>
+              <% next if feeling_key.nil? %>
+              <div class="stat-card flex items-center justify-between py-3 px-4">
+                <div class="flex items-center gap-3">
+                  <span class="text-2xl">
+                    <%= { 'happy' => '😊', 'sad' => '😢', 'meh' => '😐' }[feeling_key.to_s] || '🍃' %>
+                  </span>
+                  <span class="font-clean font-bold text-slate-700 capitalize"><%= feeling_key %></span>
+                </div>
+                <span class="font-clean text-slate-400 text-xs font-bold"><%= count %> logs</span>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+
+      <%# RIGHT COLUMN: Recent Reflections %>
+      <div class="lg:col-span-2">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-3xl font-handwritten text-slate-700">Recent Reflections</h2>
+          <%= link_to "View All", journal_entries_path, class: "font-clean text-sm text-slate-400 hover:text-slate-600" %>
+        </div>
+
+        <div class="space-y-4">
+          <% if @journal_entries.present? && @journal_entries.any? %>
+            <% @journal_entries.limit(5).each do |entry| %>
+              <div class="journal-preview-card">
+                <div class="flex justify-between items-start">
+                  <h4 class="font-clean font-bold text-slate-800">
+                    <%= entry.note.present? ? entry.note.truncate(40) : "Untitled Reflection" %>
+                  </h4>
+                  <small class="text-slate-300 font-clean"><%= entry.created_at.strftime("%b %d") %></small>
+                </div>
+                <p class="font-clean text-slate-500 text-sm italic truncate">"<%= entry.note %>"</p>
+              </div>
+            <% end %>
+          <% else %>
+            <div class="p-12 border-2 border-dashed border-slate-200 rounded-xl text-center">
+              <p class="font-clean text-slate-400">Your journal is empty. Want to write something?</p>
+              <%= link_to "Write Entry", new_journal_entry_path, class: "mt-4 inline-block font-clean font-bold text-slate-800 border-b-2 border-rose-200" %>
+            </div>
+          <% end %>
+        </div>
+
+        <%# Bottom CTA Area %>
+        <div class="mt-12 bg-slate-800 rounded-2xl p-8 text-center text-white shadow-xl">
+          <h3 class="text-3xl font-handwritten mb-4">Need a moment of peace?</h3>
+          <%= link_to "Start a Feelter Journey", select_mood_path, class: "bg-white text-slate-800 px-8 py-3 rounded-full font-clean font-bold hover:bg-rose-100 transition-all inline-block" %>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
