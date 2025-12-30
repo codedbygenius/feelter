@@ -9,7 +9,8 @@ Things you may want to cover:
 
 * System dependencies
 
-* Configuration
+* Configu<img width="1290" height="3396" alt="localhost_3000_mood_select(iPhone 14 Pro Max) (1)" src="https://github.com/user-attachments/assets/352b60e9-df8e-4145-874c-edc6f5b137b7" />
+ration
 
 * Database creation
 
@@ -22,3 +23,4 @@ Things you may want to cover:
 * Deployment instructions
 
 * ...
+
